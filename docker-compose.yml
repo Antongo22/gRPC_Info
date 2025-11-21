@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  grpc-service:
+    build:
+      context: .
+      dockerfile: grpc_service/Dockerfile
+    container_name: grpc-calculator
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import grpc; channel = grpc.insecure_channel('localhost:50051'); channel.close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  api-service:
+    build:
+      context: .
+      dockerfile: api_service/Dockerfile
+    container_name: api-calculator
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+    depends_on:
+      - grpc-service
+    restart: unless-stopped
+    environment:
+      - GRPC_SERVICE_HOST=grpc-service
+      - GRPC_SERVICE_PORT=50051
+
+networks:
+  app-network:
+    driver: bridge

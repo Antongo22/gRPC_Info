@@ -1,0 +1,12 @@
+# FastAPI и зависимости
+fastapi
+uvicorn[standard]
+pydantic
+
+# gRPC - используем старые проверенные версии без runtime_version
+grpcio
+grpcio-tools
+protobuf
+
+# Переменные окружения
+python-dotenv
