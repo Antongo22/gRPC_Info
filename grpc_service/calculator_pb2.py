@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x63\x61lculator.proto\x12\ncalculator\".\n\nAddRequest\x12\x0f\n\x07number1\x18\x01 \x01(\x01\x12\x0f\n\x07number2\x18\x02 \x01(\x01\"\x1d\n\x0b\x41\x64\x64Response\x12\x0e\n\x06result\x18\x01 \x01(\x01\x32\x44\n\nCalculator\x12\x36\n\x03\x41\x64\x64\x12\x16.calculator.AddRequest\x1a\x17.calculator.AddResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x63\x61lculator.proto\x12\ncalculator\".\n\nAddRequest\x12\x0f\n\x07number1\x18\x01 \x01(\x01\x12\x0f\n\x07number2\x18\x02 \x01(\x01\"\x1d\n\x0b\x41\x64\x64Response\x12\x0e\n\x06result\x18\x01 \x01(\x01\"3\n\x0fSubtractRequest\x12\x0f\n\x07number1\x18\x01 \x01(\x01\x12\x0f\n\x07number2\x18\x02 \x01(\x01\"\"\n\x10SubtractResponse\x12\x0e\n\x06result\x18\x01 \x01(\x01\"3\n\x0fMultiplyRequest\x12\x0f\n\x07number1\x18\x01 \x01(\x01\x12\x0f\n\x07number2\x18\x02 \x01(\x01\"\"\n\x10MultiplyResponse\x12\x0e\n\x06result\x18\x01 \x01(\x01\"1\n\rDivideRequest\x12\x0f\n\x07number1\x18\x01 \x01(\x01\x12\x0f\n\x07number2\x18\x02 \x01(\x01\"/\n\x0e\x44ivideResponse\x12\x0e\n\x06result\x18\x01 \x01(\x01\x12\r\n\x05\x65rror\x18\x02 \x01(\t2\x93\x02\n\nCalculator\x12\x36\n\x03\x41\x64\x64\x12\x16.calculator.AddRequest\x1a\x17.calculator.AddResponse\x12\x45\n\x08Subtract\x12\x1b.calculator.SubtractRequest\x1a\x1c.calculator.SubtractResponse\x12\x45\n\x08Multiply\x12\x1b.calculator.MultiplyRequest\x1a\x1c.calculator.MultiplyResponse\x12?\n\x06\x44ivide\x12\x19.calculator.DivideRequest\x1a\x1a.calculator.DivideResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,6 +35,18 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_ADDREQUEST']._serialized_end=78
   _globals['_ADDRESPONSE']._serialized_start=80
   _globals['_ADDRESPONSE']._serialized_end=109
-  _globals['_CALCULATOR']._serialized_start=111
-  _globals['_CALCULATOR']._serialized_end=179
+  _globals['_SUBTRACTREQUEST']._serialized_start=111
+  _globals['_SUBTRACTREQUEST']._serialized_end=162
+  _globals['_SUBTRACTRESPONSE']._serialized_start=164
+  _globals['_SUBTRACTRESPONSE']._serialized_end=198
+  _globals['_MULTIPLYREQUEST']._serialized_start=200
+  _globals['_MULTIPLYREQUEST']._serialized_end=251
+  _globals['_MULTIPLYRESPONSE']._serialized_start=253
+  _globals['_MULTIPLYRESPONSE']._serialized_end=287
+  _globals['_DIVIDEREQUEST']._serialized_start=289
+  _globals['_DIVIDEREQUEST']._serialized_end=338
+  _globals['_DIVIDERESPONSE']._serialized_start=340
+  _globals['_DIVIDERESPONSE']._serialized_end=387
+  _globals['_CALCULATOR']._serialized_start=390
+  _globals['_CALCULATOR']._serialized_end=665
 # @@protoc_insertion_point(module_scope)

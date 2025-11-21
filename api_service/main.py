@@ -50,6 +50,64 @@ class AddResponse(BaseModel):
     result: float
 
 
+class SubtractRequest(BaseModel):
+    """Pydantic модель для вычитания"""
+    number1: float
+    number2: float
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "number1": 10.0,
+                "number2": 3.5
+            }
+        }
+
+
+class SubtractResponse(BaseModel):
+    """Модель ответа для вычитания"""
+    result: float
+
+
+class MultiplyRequest(BaseModel):
+    """Pydantic модель для умножения"""
+    number1: float
+    number2: float
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "number1": 4.0,
+                "number2": 2.5
+            }
+        }
+
+
+class MultiplyResponse(BaseModel):
+    """Модель ответа для умножения"""
+    result: float
+
+
+class DivideRequest(BaseModel):
+    """Pydantic модель для деления"""
+    number1: float
+    number2: float
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "number1": 10.0,
+                "number2": 2.0
+            }
+        }
+
+
+class DivideResponse(BaseModel):
+    """Модель ответа для деления"""
+    result: float
+    error: str = ""
+
+
 
 @app.post("/add", response_model=AddResponse)
 async def add_numbers(request: AddRequest):  # Асинхронная функция-обработчик
@@ -88,6 +146,118 @@ async def add_numbers(request: AddRequest):  # Асинхронная функц
             status_code=500,
             detail=f"Внутренняя ошибка: {str(e)}"
         )
+
+
+@app.post("/subtract", response_model=SubtractResponse)
+async def subtract_numbers(request: SubtractRequest):
+    """
+    Вычитание двух чисел через gRPC сервис
+
+    - **number1**: первое число (уменьшаемое)
+    - **number2**: второе число (вычитаемое)
+    """
+    try:
+        with grpc.insecure_channel(GRPC_ADDRESS) as channel:
+            stub = calculator_pb2_grpc.CalculatorStub(channel)
+
+            grpc_request = calculator_pb2.SubtractRequest(
+                number1=request.number1,
+                number2=request.number2
+            )
+
+            grpc_response = stub.Subtract(grpc_request)
+
+            return SubtractResponse(result=grpc_response.result)
+
+    except grpc.RpcError as e:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Ошибка связи с gRPC сервисом: {str(e)}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Внутренняя ошибка: {str(e)}"
+        )
+
+
+@app.post("/multiply", response_model=MultiplyResponse)
+async def multiply_numbers(request: MultiplyRequest):
+    """
+    Умножение двух чисел через gRPC сервис
+
+    - **number1**: первое число
+    - **number2**: второе число
+    """
+    try:
+        with grpc.insecure_channel(GRPC_ADDRESS) as channel:
+            stub = calculator_pb2_grpc.CalculatorStub(channel)
+
+            grpc_request = calculator_pb2.MultiplyRequest(
+                number1=request.number1,
+                number2=request.number2
+            )
+
+            grpc_response = stub.Multiply(grpc_request)
+
+            return MultiplyResponse(result=grpc_response.result)
+
+    except grpc.RpcError as e:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Ошибка связи с gRPC сервисом: {str(e)}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Внутренняя ошибка: {str(e)}"
+        )
+
+
+@app.post("/divide", response_model=DivideResponse)
+async def divide_numbers(request: DivideRequest):
+    """
+    Деление двух чисел через gRPC сервис
+
+    - **number1**: первое число (делимое)
+    - **number2**: второе число (делитель)
+    """
+    try:
+        with grpc.insecure_channel(GRPC_ADDRESS) as channel:
+            stub = calculator_pb2_grpc.CalculatorStub(channel)
+
+            grpc_request = calculator_pb2.DivideRequest(
+                number1=request.number1,
+                number2=request.number2
+            )
+
+            grpc_response = stub.Divide(grpc_request)
+
+            # Проверяем, есть ли ошибка (деление на ноль)
+            if grpc_response.error:
+                raise HTTPException(
+                    status_code=400,
+                    detail=grpc_response.error
+                )
+
+            return DivideResponse(
+                result=grpc_response.result,
+                error=grpc_response.error
+            )
+
+    except HTTPException:
+        raise
+    except grpc.RpcError as e:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Ошибка связи с gRPC сервисом: {str(e)}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Внутренняя ошибка: {str(e)}"
+        )
+
 
 if __name__ == "__main__":
     import uvicorn
